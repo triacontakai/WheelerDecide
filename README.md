@@ -69,4 +69,6 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 
 hmm i wanna add text here
 
+light mode is superior
+
 ur mom was here
