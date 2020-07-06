@@ -2,10 +2,10 @@ import React from 'react';
 import Konva from 'konva';
 import { Wedge, Text } from 'react-konva';
 
-const FRICTION = .001;
+const FRICTION = .0001;
 const SPIN_MIN = 3;
 const SPIN_MAX = 10;
-const FRAME_RATE = 100;
+const FRAME_RATE = 50;
 
 class Spinner extends React.Component {
     constructor(props) {
@@ -16,10 +16,13 @@ class Spinner extends React.Component {
         this.colors = this.props.items.map(() => Konva.Util.getRandomColor());
         this.sliceAngle = 360 / this.props.items.length;
         this.animationTime = 0;
+        this.previousFrameTime = 0;
     }
 
     handleClick() {
         if(!this.timerID) {
+            this.previousFrameTime = performance.now()
+
             // calculate index and degrees of item to land on
             const i = Math.floor(Math.random() * this.props.items.length);
             const lowerBound = i * this.sliceAngle;
@@ -45,9 +48,13 @@ class Spinner extends React.Component {
     }
 
     tick(initialV, initialSpin) {
-        this.animationTime += 1000/FRAME_RATE;
+        this.animationTime += performance.now() - this.previousFrameTime;
         const velocity = initialV - this.animationTime*FRICTION;
 
+        this.previousFrameTime = performance.now();
+
+        // this creates problems at high FRICTION values on the last frame
+        // TODO: think of some way to avoid that, maybe special case for last frame here?
         if(velocity <= 0) {
             clearInterval(this.timerID);
             this.timerID = null;

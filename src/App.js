@@ -52,7 +52,7 @@ class App extends React.Component {
 
           <Stage width={window.innerWidth} height={this.state.stageHeight}>
             <Layer>
-              <Spinner x={window.innerWidth*(1/3)} y={this.state.stageHeight/2} radius={400} items={["yep", "aeiouaeiou", "poggers", "another", "AGANE"]} />
+              <Spinner x={window.innerWidth*(1/3)} y={this.state.stageHeight/2} radius={400} items={["yep", "aeiouaeiou", "poggers", "another", "AGANE", "cool option", "more options!", "last one"]} />
             </Layer>
           </Stage>
 
