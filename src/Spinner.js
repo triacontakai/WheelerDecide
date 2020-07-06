@@ -90,6 +90,7 @@ class Spinner extends React.Component {
                     y={this.props.y + Math.sin(middleAngle * Math.PI/180) * this.props.radius*.90}
                     fontSize={24}
                     key={this.props.items[i] + "-text"}
+                    onClick={() => this.handleClick()}
                 />
             );
         }
