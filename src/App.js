@@ -1,16 +1,75 @@
 import React from 'react';
-//import './App.css';
+import './App.css';
 import { Stage, Layer } from 'react-konva';
 import Spinner from './Spinner.js';
 
-function App() {
-  return (
-    <Stage width={window.innerWidth} height={window.innerHeight}>
-      <Layer>
-        <Spinner x={window.innerWidth/2} y={window.innerHeight/2} radius={400} items={["yep", "cock", "poggers"]} />
-      </Layer>
-    </Stage>
-  );
+class App extends React.Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      stageHeight: 1
+    }
+    this.stageContainer = React.createRef();
+  }
+
+  checkSize = () => {
+
+    const height = this.stageContainer.current.offsetHeight;
+    this.setState({
+      stageHeight: height
+    });
+
+  }
+  
+  componentDidMount() {
+
+    this.checkSize();
+    window.addEventListener("resize", this.checkSize);
+
+  }
+
+  componentWillUnmount() {
+
+    window.removeEventListener("resize", this.checkSize);
+
+  }
+
+  render() {
+
+    return (
+
+      <div className="box">
+
+        <div className="bar">
+
+          <p>Wheeler Decide</p>
+
+        </div>
+
+        <div className="main" ref={this.stageContainer}>
+
+          <Stage width={window.innerWidth} height={this.state.stageHeight}>
+            <Layer>
+              <Spinner x={window.innerWidth*(2/3)} y={this.state.stageHeight/2} radius={400} items={["yep", "cock", "poggers"]} />
+            </Layer>
+          </Stage>
+
+          <div className="options">
+
+            <label for="urmom">Options:</label>
+            <textarea id="urmom" name="urmom" rows="5" cols="50" placeholder="type here loser"></textarea>
+
+          </div>
+
+        </div>
+
+
+      </div>
+
+    );
+  }
 }
 
 export default App;
