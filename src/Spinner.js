@@ -11,20 +11,23 @@ class Spinner extends React.Component {
         this.colors = this.props.items.map(() => Konva.Util.getRandomColor());
     }
 
-    componentDidMount() {
-        this.timerID = setInterval(
+    handleClick() {
+        if(!this.timerID) {
+          this.timerID = setInterval(
             () => this.tick(),
             1
-        )
+          )
+        }
     }
 
     componentWillUnmount() {
-        clearInterval(this.timerID);
+        if(this.timerID)
+            clearInterval(this.timerID);
     }
 
     tick() {
         this.setState({
-            spinAngle: this.state.spinAngle + 3
+            spinAngle: this.state.spinAngle + 5
         });
     }
 
@@ -41,6 +44,7 @@ class Spinner extends React.Component {
                 angle={sliceAngle}
                 fill={this.colors[i]}
                 rotation={currentRotation}
+                onClick={() => this.handleClick()}
             />);
 
             currentRotation += sliceAngle;
