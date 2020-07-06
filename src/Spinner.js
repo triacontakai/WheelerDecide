@@ -3,7 +3,6 @@ import Konva from 'konva';
 import { Wedge } from 'react-konva';
 
 const FRICTION = .001;
-// es-lint-disable-next-line
 const SPIN_MIN = 3;
 const SPIN_MAX = 10;
 const FRAME_RATE = 100;
@@ -30,13 +29,6 @@ class Spinner extends React.Component {
 
             const initialV = Math.sqrt(2 * FRICTION * theta);
             const initialSpin = this.state.spinAngle;
-
-            console.log(i);
-            console.log(lowerBound);
-            console.log(upperBound);
-            console.log(spinCount);
-            console.log(theta);
-            console.log(initialV);
 
             this.timerID = setInterval(
                 () => this.tick(initialV, initialSpin),
