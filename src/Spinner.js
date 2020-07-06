@@ -5,7 +5,7 @@ import { Wedge, Text } from 'react-konva';
 const FRICTION = .0001;
 const SPIN_MIN = 3;
 const SPIN_MAX = 10;
-const FRAME_RATE = 50;
+const FRAME_RATE = 100;
 
 class Spinner extends React.Component {
     constructor(props) {
