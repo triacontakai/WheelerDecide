@@ -6,7 +6,7 @@ class Spinner extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            spinAngle: 200,
+            spinAngle: 0,
         };
         this.colors = this.props.items.map(() => Konva.Util.getRandomColor());
     }
@@ -40,7 +40,7 @@ class Spinner extends React.Component {
             slices.push(<Wedge
                 x={this.props.x}
                 y={this.props.y}
-                radius={this.props.radius}
+                radius={this.props.radius} /*TODO: scale with viewport size */
                 angle={sliceAngle}
                 fill={this.colors[i]}
                 rotation={currentRotation}
