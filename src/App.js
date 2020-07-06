@@ -52,13 +52,13 @@ class App extends React.Component {
 
           <Stage width={window.innerWidth} height={this.state.stageHeight}>
             <Layer>
-              <Spinner x={window.innerWidth*(2/3)} y={this.state.stageHeight/2} radius={400} items={["yep", "cock", "poggers"]} />
+              <Spinner x={window.innerWidth*(2/3)} y={this.state.stageHeight/2} radius={400} items={["yep", "cock", "poggers", "another", "AGANE"]} />
             </Layer>
           </Stage>
 
           <div className="options">
 
-            <label for="urmom">Options:</label>
+            <label htmlFor="urmom">Options:</label>
             <textarea id="urmom" name="urmom" rows="5" cols="50" placeholder="type here loser"></textarea>
 
           </div>
