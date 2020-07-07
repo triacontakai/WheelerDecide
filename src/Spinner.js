@@ -1,6 +1,6 @@
 import React from 'react';
 import Konva from 'konva';
-import { Wedge, Line } from 'react-konva';
+import { Wedge, Line} from 'react-konva';
 import TruncatingText from './TruncatingText.js';
 
 const FRICTION = .0001;
@@ -9,7 +9,7 @@ const SPIN_MAX = 10;
 const FRAME_RATE = 100;
 const FONT_SIZE = 22;
 
-class Spinner extends React.Component {
+class Spinner extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -24,6 +24,7 @@ class Spinner extends React.Component {
 
     handleClick() {
         if(!this.timerID) {
+            this.animationTime = 0;
             this.previousFrameTime = performance.now()
 
             // calculate index and degrees of item to land on
@@ -61,9 +62,7 @@ class Spinner extends React.Component {
         // TODO: think of some way to avoid that, maybe special case for last frame here?
         if(velocity <= 0) {
             clearInterval(this.timerID);
-            this.timerID = null;
-            this.animationTime = 0;
-            return;            
+            this.timerID = false;
         }
 
         this.setState({
@@ -95,6 +94,8 @@ class Spinner extends React.Component {
                     key={i +"-wedge"}
                     stroke="black"
                     strokeWidth={1}
+                    perfectDrawEnabled={false}
+                    listening={!this.timerID}
                 />
             );
 
@@ -123,6 +124,8 @@ class Spinner extends React.Component {
                     key={i + "-text"}
                     onClick={() => this.handleClick()}
                     maxWidth={this.props.radius*.70} // TODO: base this off of the slice angle for smaller slices
+                    perfectDrawEnabled={false}
+                    listening={!this.timerID}
                 />
             );
         }

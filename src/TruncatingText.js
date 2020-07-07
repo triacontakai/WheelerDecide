@@ -6,7 +6,7 @@ import { Text } from 'react-konva';
  * Wrapper for Konva text class with maxWidth prop
  * Automatically truncates text if it exceeds maxWidth
  */
-class TruncatingText extends React.Component {
+class TruncatingText extends React.PureComponent {
     constructor(props) {
         super(props);
         this.internalText = React.createRef();

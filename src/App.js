@@ -65,7 +65,7 @@ class App extends React.Component {
                 y={this.state.stageHeight/2}
                 radius={400}
                 items={this.state.items}
-                colors={["yellow", "black"]}
+                colors={["#F7F7F7", "#F40001"]}
               />
             </Layer>
           </Stage>
