@@ -3,7 +3,7 @@ import Konva from 'konva';
 import { Wedge, Text } from 'react-konva';
 
 const FRICTION = .0001;
-const SPIN_MIN = 3;
+const SPIN_MIN = 5;
 const SPIN_MAX = 10;
 const FRAME_RATE = 100;
 
@@ -24,10 +24,11 @@ class Spinner extends React.Component {
             this.previousFrameTime = performance.now()
 
             // calculate index and degrees of item to land on
+            // TODO: make theta generation more dramatic (i.e. more likely to land near edge of a wedge)
             const i = Math.floor(Math.random() * this.props.items.length);
             const lowerBound = i * this.sliceAngle;
             const upperBound = (i+1) * this.sliceAngle;
-            const spinCount = Math.floor(Math.random() * (SPIN_MAX - SPIN_MIN) + SPIN_MIN);
+            const spinCount = Math.floor(Math.random() * (SPIN_MAX+1 - SPIN_MIN) + SPIN_MIN);
             const theta = (Math.random() * (upperBound - lowerBound) + lowerBound - this.state.spinAngle) + 360*spinCount + 180;
 
             const initialV = Math.sqrt(2 * FRICTION * theta);
