@@ -89,6 +89,15 @@ class Spinner extends React.Component {
                     strokeWidth={1}
                 />
             );
+
+            // calculate text contrast
+            const rgb = Konva.Util.getRGB(this.colors[i]);
+            let textColor;
+            if((rgb.r*0.299 + rgb.g*0.587 + rgb.b*0.114) > 186)
+                textColor = "#000000"
+            else
+                textColor = "#ffffff"
+
             slices.push(
                 <Text
                     width={this.props.radius}
@@ -97,6 +106,7 @@ class Spinner extends React.Component {
                     x={this.props.x + Math.cos(middleAngle * Math.PI/180) * this.props.radius*.90}
                     y={this.props.y + Math.sin(middleAngle * Math.PI/180) * this.props.radius*.90}
                     fontSize={24}
+                    fill={textColor}
                     key={this.props.items[i] + "-text"}
                     onClick={() => this.handleClick()}
                 />
