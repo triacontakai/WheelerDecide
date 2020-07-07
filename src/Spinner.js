@@ -6,7 +6,7 @@ import TruncatingText from './TruncatingText.js';
 const FRICTION = .0001;
 const SPIN_MIN = 5;
 const SPIN_MAX = 10;
-const FRAME_RATE = 100;
+//const FRAME_RATE = 100;
 const FONT_SIZE = 22;
 
 class Spinner extends React.PureComponent {
@@ -23,7 +23,7 @@ class Spinner extends React.PureComponent {
     }
 
     handleClick() {
-        if(!this.timerID) {
+        if(!this.animationID) {
             this.animationTime = 0;
             this.previousFrameTime = performance.now()
 
@@ -40,16 +40,19 @@ class Spinner extends React.PureComponent {
 
             console.log(this.props.items[i]);
 
+            /*
             this.timerID = setInterval(
                 () => this.tick(initialV, initialSpin),
                 1000/FRAME_RATE
             );
+            */
+           this.animationID = window.requestAnimationFrame(() => this.tick(initialV, initialSpin));
         }
     }
 
     componentWillUnmount() {
-        if(this.timerID)
-            clearInterval(this.timerID);
+        if(this.animationID)
+            window.cancelAnimationFrame(this.animationID);
     }
 
     tick(initialV, initialSpin) {
@@ -61,9 +64,11 @@ class Spinner extends React.PureComponent {
         // this creates problems at high FRICTION values on the last frame
         // TODO: think of some way to avoid that, maybe special case for last frame here?
         if(velocity <= 0) {
-            clearInterval(this.timerID);
-            this.timerID = false;
+            window.cancelAnimationFrame(this.animationID);
+            this.animationID = false;
         }
+        else
+            window.requestAnimationFrame(() => this.tick(initialV, initialSpin));
 
         this.setState({
             spinAngle: (initialSpin + initialV*this.animationTime - .5*FRICTION*this.animationTime*this.animationTime) % 360
@@ -95,7 +100,7 @@ class Spinner extends React.PureComponent {
                     stroke="black"
                     strokeWidth={1}
                     perfectDrawEnabled={false}
-                    listening={!this.timerID}
+                    listening={!this.animationID}
                 />
             );
 
@@ -125,7 +130,7 @@ class Spinner extends React.PureComponent {
                     onClick={() => this.handleClick()}
                     maxWidth={this.props.radius*.70} // TODO: base this off of the slice angle for smaller slices
                     perfectDrawEnabled={false}
-                    listening={!this.timerID}
+                    listening={!this.animationID}
                 />
             );
         }
