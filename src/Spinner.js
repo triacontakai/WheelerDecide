@@ -1,6 +1,6 @@
 import React from 'react';
 import Konva from 'konva';
-import { Wedge, Text } from 'react-konva';
+import { Wedge, Text, Line } from 'react-konva';
 
 const FRICTION = .0001;
 const SPIN_MIN = 5;
@@ -73,12 +73,12 @@ class Spinner extends React.Component {
 
     render() {
     
-        let slices = [];
+        let elements = [];
         let currentRotation = this.state.spinAngle;
         for (let i = 0; i < this.props.items.length; i++) {
             currentRotation -= this.sliceAngle;
             const middleAngle = currentRotation + this.sliceAngle/2;
-            slices.push(
+            elements.push(
                 <Wedge
                     x={this.props.x}
                     y={this.props.y}
@@ -94,6 +94,7 @@ class Spinner extends React.Component {
             );
 
             // calculate text contrast
+            // TODO: move to constructor since we don't need to recalculate this every time
             const rgb = Konva.Util.getRGB(this.colors[i]);
             let textColor;
             if((rgb.r*0.299 + rgb.g*0.587 + rgb.b*0.114) > 186)
@@ -101,7 +102,7 @@ class Spinner extends React.Component {
             else
                 textColor = "#ffffff"
 
-            slices.push(
+            elements.push(
                 <Text
                     width={this.props.radius}
                     text={this.props.items[i]}
@@ -116,7 +117,19 @@ class Spinner extends React.Component {
             );
         }
 
-        return slices;
+        elements.push(
+            <Line
+                points={[
+                    this.props.x - this.props.radius*.91, this.props.y,
+                    this.props.x - this.props.radius*1.15, this.props.y + this.props.radius*.03,
+                    this.props.x - this.props.radius*1.15, this.props.y - this.props.radius*.03,
+                ]}
+                fill="#6abfcc"
+                closed={true}
+            />
+        );
+
+        return elements;
     }
 }
 
