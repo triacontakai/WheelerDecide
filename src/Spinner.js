@@ -6,7 +6,6 @@ import TruncatingText from './TruncatingText.js';
 const FRICTION = .0001;
 const SPIN_MIN = 5;
 const SPIN_MAX = 10;
-//const FRAME_RATE = 100;
 const FONT_SIZE = 22;
 
 class Spinner extends React.PureComponent {
@@ -16,16 +15,13 @@ class Spinner extends React.PureComponent {
             spinAngle: 360,
         };
         this.sliceAngle = [];
-        this.animationTime = 0;
-        this.previousFrameTime = 0;
+        this.animationStartTime = null;
 
         this.colors = [];
     }
 
     handleClick() {
         if(!this.animationID) {
-            this.animationTime = 0;
-            this.previousFrameTime = performance.now()
 
             // calculate index and degrees of item to land on
             // TODO: make theta generation more dramatic (i.e. more likely to land near edge of a wedge)
@@ -46,7 +42,7 @@ class Spinner extends React.PureComponent {
                 1000/FRAME_RATE
             );
             */
-           this.animationID = window.requestAnimationFrame(() => this.tick(initialV, initialSpin));
+           this.animationID = window.requestAnimationFrame((ts) => this.tick(ts, initialV, initialSpin));
         }
     }
 
@@ -55,23 +51,25 @@ class Spinner extends React.PureComponent {
             window.cancelAnimationFrame(this.animationID);
     }
 
-    tick(initialV, initialSpin) {
-        this.animationTime += performance.now() - this.previousFrameTime;
-        const velocity = initialV - this.animationTime*FRICTION;
+    tick(timestamp, initialV, initialSpin) {
+        if(this.animationStartTime === null)
+            this.animationStartTime = timestamp
+        const animationTime = timestamp - this.animationStartTime;
+        const velocity = initialV - animationTime*FRICTION;
 
         this.previousFrameTime = performance.now();
 
         // this creates problems at high FRICTION values on the last frame
         // TODO: think of some way to avoid that, maybe special case for last frame here?
         if(velocity <= 0) {
-            window.cancelAnimationFrame(this.animationID);
             this.animationID = false;
+            this.animationStartTime = null;
         }
         else
-            window.requestAnimationFrame(() => this.tick(initialV, initialSpin));
+            window.requestAnimationFrame((ts) => this.tick(ts, initialV, initialSpin));
 
         this.setState({
-            spinAngle: (initialSpin + initialV*this.animationTime - .5*FRICTION*this.animationTime*this.animationTime) % 360
+            spinAngle: (initialSpin + initialV*animationTime - .5*FRICTION*animationTime*animationTime) % 360
         });
     }
 
