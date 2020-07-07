@@ -9,7 +9,8 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      stageHeight: 1
+      stageHeight: 1,
+      items: ["", ""],
     }
     this.stageContainer = React.createRef();
   }
@@ -36,6 +37,13 @@ class App extends React.Component {
 
   }
 
+  handleChange = (event) => {
+    const items = event.target.value.split('\n');
+    this.setState({
+      items: items
+    });
+  }
+
   render() {
 
     return (
@@ -56,7 +64,7 @@ class App extends React.Component {
                 x={window.innerWidth*(1/3)}
                 y={this.state.stageHeight/2}
                 radius={400}
-                items={["yep", "aeiouaeiou", "poggers", "another", "AGANE", "cool option", "more options!", "last one"]} 
+                items={this.state.items}
                 colors={["yellow", "black"]}
               />
             </Layer>
@@ -64,8 +72,14 @@ class App extends React.Component {
 
           <div className="options">
 
-            <label htmlFor="urmom">Options:</label>
-            <textarea id="urmom" name="urmom" rows="5" cols="50" placeholder="type here loser"></textarea>
+            <label htmlFor="item-input">Items:</label>
+            <textarea name="item-input"
+              rows="5"
+              cols="50"
+              placeholder="[spinner items ...]"
+              onChange={this.handleChange}
+            >
+            </textarea>
 
           </div>
 

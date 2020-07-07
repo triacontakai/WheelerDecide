@@ -1,11 +1,13 @@
 import React from 'react';
 import Konva from 'konva';
-import { Wedge, Text, Line } from 'react-konva';
+import { Wedge, Line } from 'react-konva';
+import TruncatingText from './TruncatingText.js';
 
 const FRICTION = .0001;
 const SPIN_MIN = 5;
 const SPIN_MAX = 10;
 const FRAME_RATE = 100;
+const FONT_SIZE = 22;
 
 class Spinner extends React.Component {
     constructor(props) {
@@ -13,13 +15,11 @@ class Spinner extends React.Component {
         this.state = {
             spinAngle: 360,
         };
-        this.sliceAngle = 360 / this.props.items.length;
+        this.sliceAngle = [];
         this.animationTime = 0;
         this.previousFrameTime = 0;
 
-        this.colors = this.props.items.map((item, i) => {
-            return this.props.colors[i % this.props.colors.length];
-        });
+        this.colors = [];
     }
 
     handleClick() {
@@ -73,6 +73,11 @@ class Spinner extends React.Component {
 
     render() {
     
+        const colors = this.props.items.map((item, i) => {
+            return this.props.colors[i % this.props.colors.length];
+        });
+        this.sliceAngle = 360 / this.props.items.length;
+
         let elements = [];
         let currentRotation = this.state.spinAngle;
         for (let i = 0; i < this.props.items.length; i++) {
@@ -87,7 +92,7 @@ class Spinner extends React.Component {
                     fill={this.colors[i]}
                     rotation={currentRotation}
                     onClick={() => this.handleClick()}
-                    key={this.props.items[i] +"-wedge"}
+                    key={i +"-wedge"}
                     stroke="black"
                     strokeWidth={1}
                 />
@@ -98,21 +103,26 @@ class Spinner extends React.Component {
             const rgb = Konva.Util.getRGB(this.colors[i]);
             let textColor;
             if((rgb.r*0.299 + rgb.g*0.587 + rgb.b*0.114) > 186)
-                textColor = "#000000"
+                textColor = "#000000";
             else
-                textColor = "#ffffff"
+                textColor = "#ffffff";
+
+            // dude these are literally just random numbers i tried
+            // TODO: should probably improve them some time
 
             elements.push(
-                <Text
+                <TruncatingText
                     width={this.props.radius}
                     text={this.props.items[i]}
                     rotation={middleAngle + 180}
-                    x={this.props.x + Math.cos(middleAngle * Math.PI/180) * this.props.radius*.90}
-                    y={this.props.y + Math.sin(middleAngle * Math.PI/180) * this.props.radius*.90}
-                    fontSize={24}
+                    x={this.props.x + Math.cos(middleAngle * Math.PI/180) * this.props.radius*.95}
+                    y={this.props.y + Math.sin(middleAngle * Math.PI/180) * this.props.radius*.95}
+                    offsetY={FONT_SIZE/2}
+                    fontSize={FONT_SIZE}
                     fill={textColor}
-                    key={this.props.items[i] + "-text"}
+                    key={i + "-text"}
                     onClick={() => this.handleClick()}
+                    maxWidth={this.props.radius*.70} // TODO: base this off of the slice angle for smaller slices
                 />
             );
         }
@@ -120,7 +130,7 @@ class Spinner extends React.Component {
         elements.push(
             <Line
                 points={[
-                    this.props.x - this.props.radius*.91, this.props.y,
+                    this.props.x - this.props.radius*.93, this.props.y,
                     this.props.x - this.props.radius*1.15, this.props.y + this.props.radius*.03,
                     this.props.x - this.props.radius*1.15, this.props.y - this.props.radius*.03,
                 ]}
