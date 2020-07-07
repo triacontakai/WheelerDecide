@@ -89,7 +89,7 @@ class Spinner extends React.Component {
                     y={this.props.y}
                     radius={this.props.radius} /*TODO: scale with viewport size */
                     angle={this.sliceAngle}
-                    fill={this.colors[i]}
+                    fill={colors[i]}
                     rotation={currentRotation}
                     onClick={() => this.handleClick()}
                     key={i +"-wedge"}
@@ -100,7 +100,7 @@ class Spinner extends React.Component {
 
             // calculate text contrast
             // TODO: move to constructor since we don't need to recalculate this every time
-            const rgb = Konva.Util.getRGB(this.colors[i]);
+            const rgb = Konva.Util.getRGB(colors[i]);
             let textColor;
             if((rgb.r*0.299 + rgb.g*0.587 + rgb.b*0.114) > 186)
                 textColor = "#000000";
