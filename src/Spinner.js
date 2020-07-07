@@ -13,10 +13,13 @@ class Spinner extends React.Component {
         this.state = {
             spinAngle: 360,
         };
-        this.colors = this.props.items.map(() => Konva.Util.getRandomColor());
         this.sliceAngle = 360 / this.props.items.length;
         this.animationTime = 0;
         this.previousFrameTime = 0;
+
+        this.colors = this.props.items.map((item, i) => {
+            return this.props.colors[i % this.props.colors.length];
+        });
     }
 
     handleClick() {
