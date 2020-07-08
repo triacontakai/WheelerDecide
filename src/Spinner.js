@@ -51,7 +51,15 @@ class Spinner extends React.PureComponent {
             window.cancelAnimationFrame(this.animationID);
     }
 
-    tick(timestamp, initialV, initialSpin) {
+    tick(timestamp, initialV, initialSpin, lastVelocity) {
+        // this creates problems at high FRICTION values on the last frame
+        // TODO: think of some way to avoid that, maybe special case for last frame here?
+        if(lastVelocity <= 0) {
+            this.animationID = false;
+            this.animationStartTime = null;
+            return;
+        }
+
         if(this.animationStartTime === null)
             this.animationStartTime = timestamp
         const animationTime = timestamp - this.animationStartTime;
@@ -59,18 +67,9 @@ class Spinner extends React.PureComponent {
 
         this.previousFrameTime = performance.now();
 
-        // this creates problems at high FRICTION values on the last frame
-        // TODO: think of some way to avoid that, maybe special case for last frame here?
-        if(velocity <= 0) {
-            this.animationID = false;
-            this.animationStartTime = null;
-        }
-        else
-            window.requestAnimationFrame((ts) => this.tick(ts, initialV, initialSpin));
-
         this.setState({
             spinAngle: (initialSpin + initialV*animationTime - .5*FRICTION*animationTime*animationTime) % 360
-        });
+        }, () => window.requestAnimationFrame((ts) => this.tick(ts, initialV, initialSpin, velocity)));
     }
 
     render() {
